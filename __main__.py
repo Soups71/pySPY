@@ -29,16 +29,13 @@ def handle_signal(signal, frame):
     global scr
     global pad_height
     if scr:
-        
         curses.echo()
         curses.endwin()
-
         # Store the current contents of pad
         scr_contents = []
         for i in range(0, pad_height):
             scr_contents.append(scr.instr(i, 0))
-        print '\n'.join(scr_contents)
-
+        print('\n'.join(scr_contents))
     raise KeyboardInterrupt
     sys.exit()
 
@@ -46,7 +43,7 @@ class FError(Exception):
     def __init__(self, error_string):
         global terminate_program
         terminate_program = True
-        print "[*] ERROR:  {0}".format(error_string)
+        print("[*] ERROR:  {0}".format(error_string))
         exit()
 
 # Access point object
@@ -86,10 +83,6 @@ def determineEncrytion(p):
             elif packet.ID == 221 and packet.info.startswith('\x00P\xf2\x01\x01\x00'):
                 enc = "WPA"
             packet = packet.payload
-
-    #if hasattr(p, 'cap'):
-    #    if "privacy" in p.cap.split("+"):
-    #        return "WEP"
     if not enc:
         if (p.FCfield & WEP_FLAG != 0):
             enc = "WEP"
@@ -302,7 +295,7 @@ def interfaceMonitorMode(interface):
     output, err = s.communicate()
     if err: raise FError("No interface \'" + interface + "\' found")
     if "monitor" in output.lower():
-        print "[*] Interface \'" + interface + "\' in monitor mode"
+        print("[*] Interface \'" + interface + "\' in monitor mode")
         return
 
     # needed to ditch output
@@ -323,7 +316,7 @@ def interfaceMonitorMode(interface):
     output, err = s.communicate()
     if err: raise FError("Bringing interface back up")
         
-    print "[*] Interface \'" + interface + "\' in monitor mode"
+    print("[*] Interface \'" + interface + "\' in monitor mode")
     return
 
 
@@ -421,22 +414,19 @@ def sniffAPThread(interface, bssid, channel, waittime, que):
 
 # Capture WPA handshake from specific target
 def scanModeCapture(interface, bssid_filter, essid_filter, ignore_bssid,  channel, scantime, waittime, output_file):
-
     ssid = []
     bssid = []
     while True:
-
         # scan area for AP and clients
         access_points, clients = scanAPClients(interface, bssid_filter, essid_filter, ignore_bssid,  channel, scantime, [])
         if terminate_program: 
-            exit()
-            
+            exit()  
         if not access_points:
             if bssid_filter:
-                print "[*] Access point \'" + bssid_filter + "\' not found during scan"
+                print("[*] Access point \'" + bssid_filter + "\' not found during scan")
                 continue
             if essid_filter:
-                print "[*] Access point \'" + essid_filter + "\' not found during scan"
+                print("[*] Access point \'" + essid_filter + "\' not found during scan")
                 continue
 
         if not bssid_filter:
@@ -475,7 +465,7 @@ def scanModeCapture(interface, bssid_filter, essid_filter, ignore_bssid,  channe
                         
         conn_clients = set(conn_clients)
         if len(conn_clients) == 1:
-            print "[*] No clients found connected to access point, trying broadcast address"
+            print("[*] No clients found connected to access point, trying broadcast address")
 
         # Begin deauth threads and for sniffing handshake
         if ssid:
@@ -497,7 +487,7 @@ def scanModeCapture(interface, bssid_filter, essid_filter, ignore_bssid,  channe
         sys.stdout.write('\n')
         sys.stdout.flush()
         if q.get():
-            print "[+] Captured WPA handshake! "
+            print("[+] Captured WPA handshake! ")
             cap = q.get()
             if os.path.isdir(output_file):
                 if ssid:
@@ -508,7 +498,7 @@ def scanModeCapture(interface, bssid_filter, essid_filter, ignore_bssid,  channe
                 wrpcap(output_file, cap)
             exit()
         else:
-            print "[-] Handshake capture failed "
+            print("[-] Handshake capture failed ")
 
         del access_points
         del clients
@@ -553,10 +543,10 @@ def scanModeAuto(interface, bssid_filter, essid_filter, ignore_bssid, channel, s
         if terminate_program: 
             exit()
         if not access_points:
-            print "[*] No access points found during scan"
+            print("[*] No access points found during scan")
             continue
         if not clients:
-            print "[*] No clients found during scan"
+            print("[*] No clients found during scan")
             continue
 
         # get clients associated with ap's
@@ -620,7 +610,7 @@ def scanModeAuto(interface, bssid_filter, essid_filter, ignore_bssid, channel, s
             ap_clients.append(cl)
             
         q = Queue.Queue()
-        print "[*] Found " + str(len(unique_bssid)) + " access points with connected clients"
+        print("[*] Found " + str(len(unique_bssid)) + " access points with connected clients")
         for idx,bs in enumerate(unique_bssid):
             sys.stdout.write("[*] deauthing " + str(len(ap_clients[idx])) + " clients on " + unique_ssid[idx] + " (channel " + str(channel[idx]) + ")")
             sys.stdout.flush()
@@ -638,14 +628,14 @@ def scanModeAuto(interface, bssid_filter, essid_filter, ignore_bssid, channel, s
             sys.stdout.write('\n')
             sys.stdout.flush()
             if q.get():
-                print "[+] captured wpa handshake! (" + unique_ssid[idx] + ", " + bs + ")"
+                print("[+] captured wpa handshake! (" + unique_ssid[idx] + ", " + bs + ")")
                 cap = q.get()
                 wrpcap(output_folder + unique_ssid[idx] + ".cap", cap)
                 del cap
                 # captured handshake now ignore AP
                 ignore_bssid.append(bs)
             else:
-                print "[-] handshake capture failed (" + unique_ssid[idx] + ", " + bs + ")"
+                print("[-] handshake capture failed (" + unique_ssid[idx] + ", " + bs + ")")
 
         del q
         del access_points
@@ -746,7 +736,7 @@ if __name__ == "__main__":
 
     
     if os.getuid() != 0:
-        print "[*] must run as root!"
+        print("[*] must run as root!")
         exit()
 
     # setup signal handler
