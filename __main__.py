@@ -709,8 +709,6 @@ def updateCursesScreen(scr, AP):
         scr.addstr(ap_row[-1], 0, row_format.format("", *row_data))
     except:
         pass
-
-    
     return
 
 def get_arguments():
