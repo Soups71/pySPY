@@ -3,6 +3,7 @@ from threading import Thread
 import pandas
 import time
 import os
+import psutil
 
 # initialize the networks dataframe that will contain all access points nearby
 networks = pandas.DataFrame(columns=["BSSID", "SSID", "dBm_Signal", "Channel", "Crypto"])
@@ -43,11 +44,27 @@ def change_channel():
         # switch channel from 1 to 14 each 0.5s
         ch = ch % 14 + 1
         time.sleep(0.5)
+def change_mode(interface):
+    os.system(f"ifconfig {interface} down")
+    os.system(f"iwconfig {interface} mode monitor")
+    os.system(f"ifconfig {interface} up")
+
+def get_interfaces():
+    addresses = psutil.net_if_addrs()
+    stats = psutil.net_if_stats()
+
+    wireless_interfaces = []
+    for intface, addr_list in addresses.items():
+        if  intface[:2] == "wl":
+            wireless_interfaces.append(intface)
+    return wireless_interfaces
 
 
 if __name__ == "__main__":
     # interface name, check using iwconfig
-    interface = "wlx9cefd5fcf13e"
+    interface = get_interfaces()[1]
+    print(interface)
+    change_mode(interface)
     # start the thread that prints all the networks
     printer = Thread(target=print_all)
     printer.daemon = True
