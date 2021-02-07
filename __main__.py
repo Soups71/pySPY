@@ -29,16 +29,13 @@ def handle_signal(signal, frame):
     global scr
     global pad_height
     if scr:
-        
         curses.echo()
         curses.endwin()
-
         # Store the current contents of pad
         scr_contents = []
         for i in range(0, pad_height):
             scr_contents.append(scr.instr(i, 0))
-        print '\n'.join(scr_contents)
-
+        print('\n'.join(scr_contents))
     raise KeyboardInterrupt
     sys.exit()
 
@@ -46,7 +43,7 @@ class FError(Exception):
     def __init__(self, error_string):
         global terminate_program
         terminate_program = True
-        print "[*] ERROR:  {0}".format(error_string)
+        print("[*] ERROR:  {0}".format(error_string))
         exit()
 
 # Access point object
@@ -86,10 +83,6 @@ def determineEncrytion(p):
             elif packet.ID == 221 and packet.info.startswith('\x00P\xf2\x01\x01\x00'):
                 enc = "WPA"
             packet = packet.payload
-
-    #if hasattr(p, 'cap'):
-    #    if "privacy" in p.cap.split("+"):
-    #        return "WEP"
     if not enc:
         if (p.FCfield & WEP_FLAG != 0):
             enc = "WEP"
@@ -302,7 +295,7 @@ def interfaceMonitorMode(interface):
     output, err = s.communicate()
     if err: raise FError("No interface \'" + interface + "\' found")
     if "monitor" in output.lower():
-        print "[*] Interface \'" + interface + "\' in monitor mode"
+        print("[*] Interface \'" + interface + "\' in monitor mode")
         return
 
     # needed to ditch output
@@ -323,7 +316,7 @@ def interfaceMonitorMode(interface):
     output, err = s.communicate()
     if err: raise FError("Bringing interface back up")
         
-    print "[*] Interface \'" + interface + "\' in monitor mode"
+    print("[*] Interface \'" + interface + "\' in monitor mode")
     return
 
 
@@ -421,22 +414,19 @@ def sniffAPThread(interface, bssid, channel, waittime, que):
 
 # Capture WPA handshake from specific target
 def scanModeCapture(interface, bssid_filter, essid_filter, ignore_bssid,  channel, scantime, waittime, output_file):
-
     ssid = []
     bssid = []
     while True:
-
         # scan area for AP and clients
         access_points, clients = scanAPClients(interface, bssid_filter, essid_filter, ignore_bssid,  channel, scantime, [])
         if terminate_program: 
-            exit()
-            
+            exit()  
         if not access_points:
             if bssid_filter:
-                print "[*] Access point \'" + bssid_filter + "\' not found during scan"
+                print("[*] Access point \'" + bssid_filter + "\' not found during scan")
                 continue
             if essid_filter:
-                print "[*] Access point \'" + essid_filter + "\' not found during scan"
+                print("[*] Access point \'" + essid_filter + "\' not found during scan")
                 continue
 
         if not bssid_filter:
@@ -475,7 +465,7 @@ def scanModeCapture(interface, bssid_filter, essid_filter, ignore_bssid,  channe
                         
         conn_clients = set(conn_clients)
         if len(conn_clients) == 1:
-            print "[*] No clients found connected to access point, trying broadcast address"
+            print("[*] No clients found connected to access point, trying broadcast address")
 
         # Begin deauth threads and for sniffing handshake
         if ssid:
@@ -497,7 +487,7 @@ def scanModeCapture(interface, bssid_filter, essid_filter, ignore_bssid,  channe
         sys.stdout.write('\n')
         sys.stdout.flush()
         if q.get():
-            print "[+] Captured WPA handshake! "
+            print("[+] Captured WPA handshake! ")
             cap = q.get()
             if os.path.isdir(output_file):
                 if ssid:
@@ -508,7 +498,7 @@ def scanModeCapture(interface, bssid_filter, essid_filter, ignore_bssid,  channe
                 wrpcap(output_file, cap)
             exit()
         else:
-            print "[-] Handshake capture failed "
+            print("[-] Handshake capture failed ")
 
         del access_points
         del clients
@@ -545,21 +535,18 @@ def deauthClientThread(bssid, clients, count):
 
 # Will automatically scan for AP's and try and capture WPA handshakes
 def scanModeAuto(interface, bssid_filter, essid_filter, ignore_bssid, channel, scantime, waittime, output_folder):
-
     # Keep working until user stops
     global stop_threads
     while True:
-
         # scan area for AP and clients
         access_points, clients = scanAPClients(interface, bssid_filter, essid_filter, ignore_bssid,  channel, scantime, [])
         if terminate_program: 
             exit()
-            
         if not access_points:
-            print "[*] No access points found during scan"
+            print("[*] No access points found during scan")
             continue
         if not clients:
-            print "[*] No clients found during scan"
+            print("[*] No clients found during scan")
             continue
 
         # get clients associated with ap's
@@ -590,8 +577,6 @@ def scanModeAuto(interface, bssid_filter, essid_filter, ignore_bssid, channel, s
                             ssid.append("Unknown("+cl.bssid+")")
                         frames.append(cl.frames)
                         break
-
-
         # get unique ap's
         unique_bssid = set(bssid)
         unique_ssid = []
@@ -604,22 +589,15 @@ def scanModeAuto(interface, bssid_filter, essid_filter, ignore_bssid, channel, s
                     unique_ssid.append(ssid[idx])
                     unique_channel.append(channel[idx])
                     break
-
-
-
         # get total client frames for each ap
         for idx,ubs in enumerate(unique_bssid):
             for idx2,bs in enumerate(bssid):
                 if bs == ubs:
                     total_frames[idx] = total_frames[idx] + frames[idx2]
-
-
         # sort by frame number
         unique_bssid = [y for x,y in sorted(zip(total_frames, unique_bssid), reverse=True)]
         unique_ssid = [y for x,y in sorted(zip(total_frames, unique_ssid), reverse=True)]
         total_frames.sort(reverse=True)
-
-
 
         # Build list of clients for each AP
         ap_clients = []
@@ -631,10 +609,8 @@ def scanModeAuto(interface, bssid_filter, essid_filter, ignore_bssid, channel, s
             cl.append("ff:ff:ff:ff:ff:ff") # append broadcast
             ap_clients.append(cl)
             
-
-        
         q = Queue.Queue()
-        print "[*] Found " + str(len(unique_bssid)) + " access points with connected clients"
+        print("[*] Found " + str(len(unique_bssid)) + " access points with connected clients")
         for idx,bs in enumerate(unique_bssid):
             sys.stdout.write("[*] deauthing " + str(len(ap_clients[idx])) + " clients on " + unique_ssid[idx] + " (channel " + str(channel[idx]) + ")")
             sys.stdout.flush()
@@ -652,20 +628,18 @@ def scanModeAuto(interface, bssid_filter, essid_filter, ignore_bssid, channel, s
             sys.stdout.write('\n')
             sys.stdout.flush()
             if q.get():
-                print "[+] captured wpa handshake! (" + unique_ssid[idx] + ", " + bs + ")"
+                print("[+] captured wpa handshake! (" + unique_ssid[idx] + ", " + bs + ")")
                 cap = q.get()
                 wrpcap(output_folder + unique_ssid[idx] + ".cap", cap)
                 del cap
                 # captured handshake now ignore AP
                 ignore_bssid.append(bs)
             else:
-                print "[-] handshake capture failed (" + unique_ssid[idx] + ", " + bs + ")"
+                print("[-] handshake capture failed (" + unique_ssid[idx] + ", " + bs + ")")
 
         del q
         del access_points
         del clients
-
-
 
 def initializeCursesScreen():
 
@@ -696,7 +670,6 @@ def initializeCursesScreen():
     time.sleep(5)
     curses.noecho()
     curses.endwin()
-
 
 def updateCursesScreen(scr, AP):
     global row_format
@@ -736,14 +709,9 @@ def updateCursesScreen(scr, AP):
         scr.addstr(ap_row[-1], 0, row_format.format("", *row_data))
     except:
         pass
-
-    
     return
 
-
-
-# Main function
-if __name__ == "__main__":
+def get_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("interface", help="wifi interface capable of monitor mode")
     parser.add_argument("-b", dest="bssid_filter", help="bssid to filter for or file containing bssid to filter for (one per line)")
@@ -758,13 +726,16 @@ if __name__ == "__main__":
     parser.add_argument("-C", dest="capturemode", action="store_true", help="capture handshake for specified AP")
     parser.add_argument("-o", dest="output_file", help="location to output .cap file (capture mode)")
     parser.add_argument("-O", dest="output_folder", help="output folder for storing cap files (auto mode)")
-    args = parser.parse_args()
+    return parser.parse_args()
+
+# Main function
+if __name__ == "__main__":
+    args = get_arguments()
 
     
     if os.getuid() != 0:
-        print "[*] must run as root!"
+        print("[*] must run as root!")
         exit()
-
 
     # setup signal handler
     global stop_threads
@@ -819,7 +790,6 @@ if __name__ == "__main__":
                 f = open(args.essid_filter, 'r')
             except:
                 FError("Cannot open file \'" + args.essid_filter + "\'")
-
             essid_filter = []
             for line in f.readlines():
                 essid_filter.append(line.strip())
@@ -828,24 +798,19 @@ if __name__ == "__main__":
                 f = open(os.getcwd() + '/' + args.essid_filter, 'r')
             except:
                 FError("Cannot open file \'" + args.essid_filter + "\'")
-
             essid_filter = []
             for line in f.readlines():
                 essid_filter.append(line.strip())
-
         else:
             essid_filter = args.essid_filter
     else:
         essid_filter = []
-
 
     # Channel
     if args.channel:
         channel = args.channel
     else:
         channel = []
-
-    
     # BSSID's to ignore:
     if args.ignore_bssid:
         if os.path.isfile(args.ignore_bssid):
@@ -942,20 +907,14 @@ if __name__ == "__main__":
             if not isinstance(essid_filter, basestring):
                 FError("Only specify 1 SSID for capture mode (use auto-mode for more)")
 
-
-
     # Place interface into monitor mode
     interfaceMonitorMode(interface)
-
-    
     
     if scanmode:
         scr = initializeCursesScreen()
         access_points, clients = scanAPClients(interface, bssid_filter, essid_filter, ignore_bssid,  channel, None, scr)
-
     if capturemode:
         scanModeCapture(interface, bssid_filter, essid_filter, ignore_bssid,  channel, scantime, waittime, output_file)
-
     if automode:
         scanModeAuto(interface, bssid_filter, essid_filter, ignore_bssid,  channel, scantime, waittime, output_folder)
         
