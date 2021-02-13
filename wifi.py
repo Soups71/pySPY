@@ -44,11 +44,16 @@ def change_channel():
         # switch channel from 1 to 14 each 0.5s
         ch = ch % 14 + 1
         time.sleep(0.5)
-def change_mode(interface):
-    os.system(f"ifconfig {interface} down")
-    os.system(f"iwconfig {interface} mode monitor")
-    os.system(f"ifconfig {interface} up")
 
+# Changes wireless adapters from managed to monitor
+def change_mode(interface):
+        os.system(f"ifconfig {interface} down")
+        os.system(f"iwconfig {interface} mode monitor")
+        os.system(f"ifconfig {interface} up")
+
+
+# Gets Wireless adapters that aren't the main wifi card.
+# Could be an issue as I made the assumption that the first card is the main card
 def get_interfaces():
     addresses = psutil.net_if_addrs()
     stats = psutil.net_if_stats()
