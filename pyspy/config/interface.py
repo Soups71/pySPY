@@ -17,7 +17,7 @@ class interface:
     def kill_changer(self):
         self.kill_changer = True
     def set_pcap(self):
-        filename = datetime.now.strftime("%d_%m_%Y_%H_%M_%S_Channel_") + str(self.channel)+".pcap"
+        filename = "pcaps/"+datetime.now().strftime("%d_%m_%Y_%H_%M_%S_Channel_") + str(self.channel)+".pcap"
         self.file = PcapWriter(filename, append=True, sync=True)
     def sniffEAPOL(self, p):
         if(p.haslayer(EAPOL)):
@@ -27,10 +27,6 @@ class interface:
     def sniffPackets(self):
         sniff(iface=self.name, prn=self.sniffEAPOL, count=0)
 
-    def change_channel(self):
-        while not self.kill_changer:
+    def change_channel(self, ch):
+            self.channel = ch
             os.system(f"iwconfig {self.name} channel {self.channel}")
-            # switch channel from 1 to 14 each 0.5s
-            print(f"Current channel: {self.channel}")
-            self.channel = self.channel % 14 + 1
-            sleep(0.5)

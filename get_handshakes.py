@@ -1,5 +1,5 @@
-from attacks import deauth
-from config import interface, get_interfaces
+from pyspy.attacks import deauth
+from pyspy.config import interface, get_interfaces
 from scapy import *
 from scapy.all import *
 from threading import Thread
@@ -8,7 +8,7 @@ important_channels = [1, 6, 11, 13]
 
 if __name__ == "__main__":
     interfaces = []
-    wireless_interfaces = get_interfaces()
+    wireless_interfaces = get_interfaces()[1:]
     for each in wireless_interfaces:
         interfaces.append(interface(each))
     count = 0
@@ -20,10 +20,11 @@ if __name__ == "__main__":
     processes = []
     current_process = 0
     for each in interfaces:
-        processes.append(Thread(target=each.sniffPackets), current_process)
+        processes.append(Thread(target=each.sniffPackets))
         processes[current_process].daemon = True
         processes[current_process].start()
         print(f"Capturing Packets with {each.name}")
+        current_process +=1
     
     print("Capturing Packets!!!")
     while(True):

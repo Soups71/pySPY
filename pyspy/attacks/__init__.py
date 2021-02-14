@@ -1,1 +1,1 @@
-from attacks.deauth import deauth
+from pyspy.attacks.deauth import deauth

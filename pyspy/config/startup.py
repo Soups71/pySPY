@@ -16,6 +16,7 @@ def get_deauth_args():
                         help='Destination MAC address. Needed for Deauth attack')
     parser.add_argument('-f', 
                         '--forever', 
+                        action='store_true',
                         dest='forever', 
                         help='Sets the duration of the deauth attack')
 

