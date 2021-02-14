@@ -1,0 +1,1 @@
+from attacks.deauth import deauth

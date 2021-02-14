@@ -3,7 +3,6 @@
 from scapy import *
 from scapy.all import *
 import psutil
-from scapy.all import *
 import pandas
 import os
 import psutil

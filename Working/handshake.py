@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-import sys
+#!/usr/bin/env python3
 from scapy import *
 from scapy.all import *
 import psutil
