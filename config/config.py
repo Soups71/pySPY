@@ -1,11 +1,6 @@
 import os
 import psutil
 
-def change_mode(interface):
-        os.system(f"ifconfig {interface} down")
-        os.system(f"iwconfig {interface} mode monitor")
-        os.system(f"ifconfig {interface} up")
-
 
 def get_interfaces():
     addresses = psutil.net_if_addrs()
