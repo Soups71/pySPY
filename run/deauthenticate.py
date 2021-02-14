@@ -1,6 +1,6 @@
-from attacks import deauth
-from callbacks import get_hostnames, networks
-from config import interface, get_deauth_args, get_interfaces
+from pyspy.attacks import deauth
+from pyspy.callbacks import get_hostnames, networks
+from pyspy.config import interface, get_deauth_args, get_interfaces
 from threading import Thread
 from scapy import *
 from scapy.all import *
