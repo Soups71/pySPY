@@ -5,7 +5,6 @@ from threading import Thread
 from scapy import *
 from time import sleep
 from scapy.all import *
-import pandas
 
 if __name__ == '__main__':
     arguments = get_deauth_args()

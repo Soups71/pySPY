@@ -1,4 +1,3 @@
-from pyspy.attacks import deauth
 from pyspy.config import interface, get_interfaces
 from scapy import *
 from scapy.all import *
