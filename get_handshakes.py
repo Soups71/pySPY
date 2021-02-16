@@ -56,5 +56,5 @@ if __name__ == "__main__":
     cli_arguments = get_handshake_args()
     if not cli_arguments.quiet:
         banner()
-        cprint("[+] Begining initialization sequence to collect handshakes")
+        print_good("[+] Begining initialization sequence to collect handshakes")
     main(cli_arguments)

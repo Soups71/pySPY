@@ -17,10 +17,10 @@ def main(arguments):
         my_interface = interface(arguments.interface)
     else:
         my_interface = interface(get_interfaces()[1])
-    print_update(f"[+] The interface used for deauthentication is: {my_interface}")
+    print_update(f"[+] The interface used for deauthentication is: {my_interface.name}")
     # Put the interface into monitor mode
     my_interface.set_monitor_mode()
-    print_update(f"[+] {my_interface} has been set into monitor mode")
+    print_update(f"[+] {my_interface.name} has been set into monitor mode")
     # Gets the empty dataframe from the callback
     networks = getDF()
     # While the AP mac address isn't present keep searching
@@ -71,6 +71,6 @@ if __name__ == '__main__':
     cli_arguments = get_deauth_args()
     if not cli_arguments.quiet:
         banner()
-        cprint("[+] Begining deauthentication initialization sequence")
+        print_good("[+] Begining deauthentication initialization sequence")
     main(cli_arguments)
         
