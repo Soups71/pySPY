@@ -1,5 +1,5 @@
 # Imports
-from pyspy.config import interface, get_interfaces, get_handshake_args
+from pyspy.config import interface, get_interfaces, get_handshake_args, banner
 from pyspy.config import print_warning, print_update, print_good
 from scapy import *
 from scapy.all import *
@@ -48,10 +48,13 @@ def main(arguments):
                 each.join()
             break
     if(not arguments.quiet):
-            print("Goodbye")
+            print_good("Goodbye")
 
 
 # Start of main program
 if __name__ == "__main__":
     cli_arguments = get_handshake_args()
+    if not cli_arguments.quiet:
+        banner()
+        cprint("[+] Begining initialization sequence to collect handshakes")
     main(cli_arguments)
