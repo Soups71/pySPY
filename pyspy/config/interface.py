@@ -31,3 +31,7 @@ class interface:
     def change_channel(self, ch):
             self.channel = ch
             os.system(f"sudo iwconfig {self.name} channel {self.channel}")
+    def increment_channel(self):
+        self.channel +=1
+        self.channel = self.channel%14
+        os.system(f"sudo iwconfig {self.name} channel {self.channel}")
