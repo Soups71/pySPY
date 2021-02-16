@@ -9,7 +9,6 @@ def print_good(output):
 def print_update(output):
     cprint(output, 'yellow')
 
-
 def get_interfaces():
     addresses = psutil.net_if_addrs()
     stats = psutil.net_if_stats()

@@ -1,7 +1,7 @@
 # Imports for libraries
 from pyspy.attacks import deauth
 from pyspy.callbacks import get_hostnames, getDF
-from pyspy.config import interface, get_deauth_args, get_interfaces
+from pyspy.config import interface, get_deauth_args, get_interfaces, banner
 from pyspy.config import print_warning, print_update, print_good
 from threading import Thread
 from scapy import *
@@ -69,5 +69,8 @@ def main(arguments):
 if __name__ == '__main__':
     # Gets arguments from the cli
     cli_arguments = get_deauth_args()
+    if not cli_arguments.quiet:
+        banner()
+        cprint("[+] Begining deauthentication initialization sequence")
     main(cli_arguments)
         
