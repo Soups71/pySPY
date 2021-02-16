@@ -62,6 +62,8 @@ def get_handshake_args():
     parser.set_defaults(quiet = False)
     options = parser.parse_args()
         # Check if target was provided
-    options.channel = [each for each in options.channel.split(',')]
-
+    if options.channel != None:
+        options.channel = [each for each in options.channel.split(',')]
+    else:
+        options.channel = []
     return options

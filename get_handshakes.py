@@ -25,7 +25,8 @@ def main(arguments):
     elif(len(interfaces)<len(important_channels)):
         print_warning("[+] Not every channel will be used for capture. EAPOL packets will be missed")
     while(count < len(interfaces)):
-        interfaces[count].channel = important_channels[count]
+        interfaces[count].set_monitor_mode()
+        interfaces[count].change_channel(important_channels[count])
         count+=1
     # Sets the file to save the EAPOL packets to
     for each in interfaces:
@@ -41,12 +42,12 @@ def main(arguments):
             print_update(f"[+] Capturing Packets with {each.name} on channel {each.channel}")
         current_process +=1
     # This doesn't work to stop it but it trys it's best
-    while(True):
-        shutdown = input("Would you like to stop capturing packets: ")
-        if(shutdown.lower() == 'y'):
-            for each in processes:
-                each.join()
-            break
+    # while(True):
+    #     shutdown = input("Would you like to stop capturing packets: ")
+    #     if(shutdown.lower() == 'y'):
+    #         for each in processes:
+    #             each.join()
+    #         break
     if(not arguments.quiet):
             print_good("Goodbye")
 

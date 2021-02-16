@@ -1,4 +1,3 @@
-import os
 import psutil
 from termcolor import cprint
 
