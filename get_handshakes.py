@@ -1,5 +1,6 @@
 # Imports
 from pyspy.config import interface, get_interfaces, get_handshake_args
+from pyspy.config import print_warning, print_update, print_good
 from scapy import *
 from scapy.all import *
 from threading import Thread
@@ -19,7 +20,10 @@ def main(arguments):
         interfaces.append(interface(each))
     # This loop just allows for us to put each interface on a different channel
     count = 0
-
+    if(len(interfaces)>len(important_channels)):
+        print_warning("[+] Not every interface will be used")
+    elif(len(interfaces)<len(important_channels)):
+        print_warning("[+] Not every channel will be used for capture. EAPOL packets will be missed")
     while(count < len(interfaces)):
         interfaces[count].channel = important_channels[count]
         count+=1
@@ -34,10 +38,8 @@ def main(arguments):
         processes[current_process].daemon = True
         processes[current_process].start()
         if(not arguments.quiet):
-            print(f"Capturing Packets with {each.name} on channel {each.channel}")
+            print_update(f"[+] Capturing Packets with {each.name} on channel {each.channel}")
         current_process +=1
-    if(not arguments.quiet):
-            print("Capturing Packets!!!")
     # This doesn't work to stop it but it trys it's best
     while(True):
         shutdown = input("Would you like to stop capturing packets: ")

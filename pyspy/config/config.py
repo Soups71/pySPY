@@ -1,5 +1,13 @@
 import os
 import psutil
+from termcolor import cprint
+
+def print_warning(output):
+    cprint(output, 'red')
+def print_good(output):
+    cprint(output, 'green')
+def print_update(output):
+    cprint(output, 'yellow')
 
 
 def get_interfaces():

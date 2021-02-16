@@ -14,3 +14,8 @@ At the moment there are two scripts:
 * `sudo python3 deauthenticate.py -b MAC_ADDR -f`
 * `sudo python3 get_handshakes.py`
 
+## Disclaimer:
+This project is for education and learning. Do NOT use it to attack any networks you do not have explicit permission to test on. I take no responsibility for how you choose to use this. Please consult local laws as to the legality to preform deauthentication attacks and packet sniffing.
+
+Created by: Soups71
+
