@@ -20,7 +20,7 @@ def get_deauth_args():
                         dest='forever', 
                         help='Sets the duration of the deauth attack')
 
-    parser.set_defaults(verbose=False, deauth = False)
+    parser.set_defaults(deauth = False)
     options = parser.parse_args()
         # Check if target was provided
     if options.deauth and not options.bssid:
