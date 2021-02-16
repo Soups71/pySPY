@@ -14,6 +14,36 @@ def banner():
     cprint("[+] Created by: Soups71", 'blue')
     cprint("-------------------------------------", 'red')
 
+def get_AP_scanner_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i',
+                        '--interface',
+                        dest='interface', 
+                        help='Specify interface to run attack')
+                        
+    parser.add_argument('-q', 
+                    '--quiet', 
+                    action='store_true',
+                    dest='quiet', 
+                    help='Suppresses normal output of the program')
+    parser.add_argument('-ca', 
+                        '--capture_all', 
+                        action='store_true',
+                        dest='capture_all', 
+                        help='Suppresses normal output of the program')
+    parser.add_argument('-w', 
+                        '--write', 
+                        action='store_true',
+                        dest='save', 
+                        help='Save AP data to file')
+    
+
+    parser.set_defaults(quiet = False, write = False, capture_all=False)
+    options = parser.parse_args()
+        # Check if target was provided
+    return options
+
+
 
 def get_deauth_args():
     parser = argparse.ArgumentParser()
