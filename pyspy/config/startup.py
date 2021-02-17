@@ -26,15 +26,10 @@ def get_AP_scanner_args():
                     action='store_true',
                     dest='quiet', 
                     help='Suppresses normal output of the program')
-    parser.add_argument('-ca', 
-                        '--capture_all', 
-                        action='store_true',
-                        dest='capture_all', 
-                        help='Suppresses normal output of the program')
     parser.add_argument('-w', 
                         '--write',
                         dest='write', 
-                        help='Save AP data to file')
+                        help='Saves AP data to file')
     
 
     parser.set_defaults(quiet = False, write = False, capture_all=False)
