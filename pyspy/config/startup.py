@@ -32,9 +32,8 @@ def get_AP_scanner_args():
                         dest='capture_all', 
                         help='Suppresses normal output of the program')
     parser.add_argument('-w', 
-                        '--write', 
-                        action='store_true',
-                        dest='save', 
+                        '--write',
+                        dest='write', 
                         help='Save AP data to file')
     
 

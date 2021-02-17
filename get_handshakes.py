@@ -42,12 +42,15 @@ def main(arguments):
             print_update(f"[+] Capturing Packets with {each.name} on channel {each.channel}")
         current_process +=1
     # This doesn't work to stop it but it trys it's best
-    # while(True):
-    #     shutdown = input("Would you like to stop capturing packets: ")
-    #     if(shutdown.lower() == 'y'):
-    #         for each in processes:
-    #             each.join()
-    #         break
+    while(True):
+        print_good("[+] Would you like to stop capturing packets (y/N): ", False)
+        shutdown = input()
+        if(shutdown.lower() == 'y'):
+            for each in interfaces:
+                each.kill_changer()
+            break
+    for each in processes:
+                each.join()
     if(not arguments.quiet):
             print_good("Goodbye")
 

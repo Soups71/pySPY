@@ -9,29 +9,30 @@ class interface:
     def __init__(self, name):
         self.name = name
         self.channel = 1
-        self.kill_changer = False
+        self.kill = False
         self.file = ""
     def set_monitor_mode(self):
         os.system(f"sudo ifconfig {self.name} down")
         os.system(f"sudo iwconfig {self.name} mode monitor")
         os.system(f"sudo ifconfig {self.name} up")
     def kill_changer(self):
-        self.kill_changer = True
+        self.kill= True
     def set_pcap(self):
         filename = "pcaps/"+datetime.now().strftime("%d_%m_%Y_%H_%M_%S_Channel_") + str(self.channel)+".pcap"
         self.file = PcapWriter(filename, append=True, sync=True)
     def sniffEAPOL(self, p):
         if(p.haslayer(EAPOL)):
             self.file.write(p)
-            cprint(f"[+] EAPOL packet captured on channel {self.channel}", "green")
-
+            # cprint(f"[+] EAPOL packet captured on channel {self.channel}", "green")
     def sniffPackets(self):
-        sniff(iface=self.name, prn=self.sniffEAPOL, count=0)
+        while not self.kill:
+            sniff(iface=self.name, prn=self.sniffEAPOL, count=20)
 
     def change_channel(self, ch):
             self.channel = ch
             os.system(f"sudo iwconfig {self.name} channel {self.channel}")
     def increment_channel(self):
-        self.channel +=1
-        self.channel = self.channel%14
-        os.system(f"sudo iwconfig {self.name} channel {self.channel}")
+        while not self.kill:
+            self.channel = self.channel%14+1
+            os.system(f"sudo iwconfig {self.name} channel {self.channel}")
+            sleep(.2)
