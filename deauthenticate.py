@@ -9,7 +9,7 @@ from time import sleep
 from scapy.all import *
 
 
-def main(arguments):
+def deauthenticate(arguments):
     # Checks if a channel interface is passed
     # If it is set the interface to that adapter
     # If not get the interface automatically
@@ -47,6 +47,8 @@ def main(arguments):
     # Set the antena channel to that of the AP in order to deauth
     my_interface.change_channel(channel_for_deauth)
     
+    print_warning("[+] You need to hit ctrl-c to exit")
+
     # Check if a destination mac was provided
     # If it was only deauth that device
     # Else disconnect all the things
@@ -81,5 +83,5 @@ if __name__ == '__main__':
     if not cli_arguments.quiet:
         banner()
         print_good("[+] Begining deauthentication initialization sequence")
-    main(cli_arguments)
+    deauthenticate(cli_arguments)
         

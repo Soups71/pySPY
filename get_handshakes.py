@@ -6,7 +6,7 @@ from scapy.all import *
 from threading import Thread
 
 
-def main(arguments):
+def handshake(arguments):
     # Most common wifi channels
     important_channels = [1, 6, 11, 12, 13]
 
@@ -54,9 +54,13 @@ def main(arguments):
 
     # This doesn't work to stop it but it trys it's best
     while(True):
-        print_good("[+] Would you like to stop capturing packets (y/N): ", False)
-        shutdown = input()
-        if(shutdown.lower() == 'y'):
+        print_good("[+] Get update? (Y/n/exit): ", False)
+        user_input = input()
+        if user_input.lower() == 'y':
+            for each in interfaces:
+                print_good(f"[+] {each.get_EAPOL_count()} EAPOL packets captured on channel {each.channel}")
+        elif(user_input.lower() == 'exit'):
+            print_update("[+] Starting exit protocol. Just sit back and relax.")
             for each in interfaces:
                 # Allows for it to close cleanly
                 each.kill_changer()
@@ -75,4 +79,4 @@ if __name__ == "__main__":
     if not cli_arguments.quiet:
         banner()
         print_good("[+] Begining initialization sequence to collect handshakes")
-    main(cli_arguments)
+    handshake(cli_arguments)

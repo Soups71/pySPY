@@ -33,7 +33,7 @@ def get_input():
 
 
 # Main program
-def main(arguments):
+def apSPY(arguments):
     global keep_going
     # Get's interface name
     if arguments.interface != None:
@@ -85,4 +85,4 @@ if __name__ == "__main__":
     cli_arguments = get_AP_scanner_args()
     if  not cli_arguments.quiet:
         banner()
-    main(cli_arguments)
+    apSPY(cli_arguments)
