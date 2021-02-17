@@ -27,5 +27,6 @@ def get_hostnames(packet):
         crypto = stats.get("crypto")
         crypto = str(crypto).strip("{'").strip("'}")
         networks.loc[bssid] = (ssid, dbm_signal, channel, crypto)
+
 def getDF():
     return networks
