@@ -6,9 +6,12 @@ from scapy.all import *
 networks = pandas.DataFrame(columns=["BSSID", "SSID", "dBm_Signal", "Channel", "Crypto"])
 # set the index BSSID (MAC address of the AP)
 networks.set_index("BSSID", inplace=True)
+
+# Function to save the data frame
 def save_results(filename):
     networks.to_csv(filename)
 
+# Gets the data out of the packets
 def get_hostnames(packet):
     if packet.haslayer(Dot11Beacon):
         # extract the MAC address of the network
@@ -28,5 +31,6 @@ def get_hostnames(packet):
         crypto = str(crypto).strip("{'").strip("'}")
         networks.loc[bssid] = (ssid, dbm_signal, channel, crypto)
 
+# Function to send dataframe back to the main program
 def getDF():
     return networks

@@ -1,6 +1,7 @@
 import psutil
 from termcolor import cprint
 
+# Fancy print
 def print_warning(output, newline=True):
     if newline:
         cprint(output, 'red')
@@ -17,6 +18,7 @@ def print_update(output, newline=True):
     else:
         cprint(output, 'yellow', end='')
 
+# Gets interfaces connected to the computer
 def get_interfaces():
     addresses = psutil.net_if_addrs()
     wireless_interfaces = []

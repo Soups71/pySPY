@@ -1,6 +1,7 @@
 import argparse
 from termcolor import cprint
 
+# Banner Art
 def banner():
     cprint("               _____ _______     __  ", 'yellow')
     cprint("              / ____|  __ \ \   / /  ", 'yellow')
@@ -14,6 +15,7 @@ def banner():
     cprint("[+] Created by: Soups71", 'blue')
     cprint("-------------------------------------", 'red')
 
+# Arguments for the AP scanner
 def get_AP_scanner_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i',
@@ -38,7 +40,7 @@ def get_AP_scanner_args():
     return options
 
 
-
+# Arguments for the deauth
 def get_deauth_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i',
@@ -72,6 +74,8 @@ def get_deauth_args():
 
     return options
 
+
+# Arguments for gathering handshakes
 def get_handshake_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-c',

