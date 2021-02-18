@@ -34,7 +34,7 @@ class interface:
            
     def sniffPackets(self):
         while not self.kill:
-            sniff(iface=self.name, prn=self.sniffEAPOL, count=20)
+            sniff(iface=self.name, prn=self.sniffEAPOL, count=200)
     
     def change_channel(self, ch):
             self.channel = ch

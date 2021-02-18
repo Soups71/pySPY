@@ -3,7 +3,6 @@ from pyspy.attacks import deauth
 from pyspy.callbacks import get_hostnames, getDF
 from pyspy.config import interface, get_deauth_args, get_interfaces, banner
 from pyspy.config import print_warning, print_update, print_good
-from threading import Thread
 from scapy import *
 from time import sleep
 from scapy.all import *
