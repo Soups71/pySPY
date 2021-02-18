@@ -41,7 +41,6 @@ def deauthenticate(arguments):
             # Used to keep the channel below 14
             scan_channel = (scan_channel %14)+1
             my_interface.change_channel(scan_channel)
-            print(networks)
         
         # Once the AP mac address is found get the channel
         channel_for_deauth = networks.loc[arguments.bssid, "Channel"]
