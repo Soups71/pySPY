@@ -1,4 +1,5 @@
 # Imports for libraries
+from socket import timeout
 from pyspy.attacks import deauth
 from pyspy.callbacks import get_hostnames, getDF
 from pyspy.config import interface, get_deauth_args, get_interfaces, banner
@@ -27,21 +28,25 @@ def deauthenticate(arguments):
     # Gets the empty dataframe from the callback
     networks = getDF()
     
-    # While the AP mac address isn't present keep searching
-    print_update(f"[+] Beginning search for {arguments.bssid}")
-    
-    while(arguments.bssid not in networks.index):
-        # Sniff 50 pcakets at a time
-        sniff(prn=get_hostnames, iface=my_interface.name, count = 50)
-        # Get the dataframe created by the call back
-        networks = getDF()
-        # increase the channel
-        my_interface.channel += 1
-        # Used to keep the channel below 14
-        my_interface.channel = my_interface.channel %14
-    
-    # Once the AP mac address is found get the channel
-    channel_for_deauth = networks.loc[arguments.bssid, "Channel"]
+    if arguments.channel == None:
+        # While the AP mac address isn't present keep searching
+        print_update(f"[+] Beginning search for {arguments.bssid}")
+        scan_channel = 1
+        while(arguments.bssid not in networks.index):
+            # Sniff 50 pcakets at a time
+            sniff(prn=get_hostnames, iface=my_interface.name, timeout=2)
+            # Get the dataframe created by the call back
+            networks = getDF()
+            # increase the channel
+            # Used to keep the channel below 14
+            scan_channel = (scan_channel %14)+1
+            my_interface.change_channel(scan_channel)
+            print(networks)
+        
+        # Once the AP mac address is found get the channel
+        channel_for_deauth = networks.loc[arguments.bssid, "Channel"]
+    else:
+        channel_for_deauth = arguments.channel
     
     # Set the antena channel to that of the AP in order to deauth
     my_interface.change_channel(channel_for_deauth)

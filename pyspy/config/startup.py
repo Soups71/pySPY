@@ -65,6 +65,10 @@ def get_deauth_args():
                     action='store_true',
                     dest='quiet', 
                     help='Suppresses normal output of the program')
+    parser.add_argument('-c',
+                    '--channel',
+                    dest='channel', 
+                    help="Specific channels you'd like to scan. Format: -c 1")
 
     parser.set_defaults(deauth = False, quiet = False)
     options = parser.parse_args()
