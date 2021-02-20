@@ -18,7 +18,13 @@ def deauthenticate(arguments):
     if arguments.interface:
         my_interface = interface(arguments.interface)
     else:
-        my_interface = interface(get_interfaces()[1])
+        try:
+            my_interface = interface(get_interfaces()[1])
+        except Exception as e:
+            print_warning("[+] Error: No external WiFi card present.")
+            print_warning("[+] If you don't have a built in wifi card then please specify the specific wifi card")
+            return -1
+
 
     print_update(f"[+] The interface used for deauthentication is: {my_interface.name}")
     
@@ -52,7 +58,7 @@ def deauthenticate(arguments):
     # Set the antena channel to that of the AP in order to deauth
     my_interface.change_channel(channel_for_deauth)
     
-    print_warning("[+] You need to hit ctrl-c to exit")
+    print_warning("[+] You need to hit ctrl-c (multiple times) to exit")
 
     # Check if a destination mac was provided
     # If it was only deauth that device
