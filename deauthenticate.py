@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 # Imports for libraries
 from socket import timeout
 from pyspy.attacks import deauth

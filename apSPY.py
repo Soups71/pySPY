@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 # Imports
 from pyspy.config.config import print_good
 from scapy.all import *

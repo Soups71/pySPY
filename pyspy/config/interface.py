@@ -12,7 +12,7 @@ class interface:
         self.channel = 1
         self.kill = False
         self.file = ""
-        self.EAPOL_count = 0
+        self.packet_count = 0
 
 
     def set_monitor_mode(self):
@@ -27,15 +27,23 @@ class interface:
         filename = "pcaps/"+datetime.now().strftime("%d_%m_%Y_%H_%M_%S_Channel_") + str(self.channel)+".pcap"
         self.file = PcapWriter(filename, append=True, sync=True)
 
-    def sniffEAPOL(self, p):
+    def eapol_handler(self, p):
         if(p.haslayer(EAPOL)):
             self.file.write(p)
-            self.EAPOL_count +=1
-           
-    def sniffPackets(self):
-        while not self.kill:
-            sniff(iface=self.name, prn=self.sniffEAPOL, count=200)
+            self.packet_count +=1
     
+    def save_packet_handler(self, p):
+        self.file.write(p)
+        self.packet_count +=1
+
+    def sniff_EAPOL_packets(self):
+        while not self.kill:
+            sniff(iface=self.name, prn=self.eapol_handler, count=200)
+    
+    def sniff_all_packets(self):
+        while not self.kill:
+            sniff(iface=self.name, prn=self.save_packet_handler, count=200)
+
     def change_channel(self, ch):
             self.channel = ch
             os.system(f"sudo iwconfig {self.name} channel {self.channel}")
@@ -45,5 +53,3 @@ class interface:
             self.channel = self.channel%14+1
             os.system(f"sudo iwconfig {self.name} channel {self.channel}")
             sleep(.2)
-    def get_EAPOL_count(self):
-        return self.EAPOL_count

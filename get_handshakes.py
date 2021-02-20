@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 # Imports
 from pyspy.config import interface, get_interfaces, get_handshake_args, banner
 from pyspy.config import print_warning, print_update, print_good
@@ -45,7 +46,10 @@ def handshake(arguments):
     processes = []
     current_process = 0
     for each in interfaces:
-        processes.append(Thread(target=each.sniffPackets))
+        if arguments.eapol:
+            processes.append(Thread(target=each.sniff_EAPOL_packets))
+        else:
+            processes.append(Thread(target=each.sniff_all_packets))
         processes[current_process].daemon = True
         processes[current_process].start()
         if(not arguments.quiet):
@@ -56,9 +60,9 @@ def handshake(arguments):
     while(True):
         print_good("[+] Get update? (Y/n/exit): ", False)
         user_input = input()
-        if user_input.lower() == 'y':
+        if user_input.lower() == 'y' or user_input.lower() == '':
             for each in interfaces:
-                print_good(f"[+] {each.get_EAPOL_count()} EAPOL packets captured on channel {each.channel}")
+                print_good(f"[+] {each.packet_count}  packets captured on channel {each.channel}")
         elif(user_input.lower() == 'exit'):
             print_update("[+] Starting exit protocol. Just sit back and relax.")
             for each in interfaces:

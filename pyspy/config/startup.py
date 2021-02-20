@@ -86,6 +86,16 @@ def get_handshake_args():
                         '--channel',
                         dest='channel', 
                         help="Specific channels you'd like to scan. Format: -c 1,2,3,4")
+    parser.add_argument('-e', 
+                        '--eapol', 
+                        action='store_true',
+                        dest='eapol', 
+                        help='Used to only capture eapol packets')
+    parser.add_argument('-a', 
+                        '--all', 
+                        action='store_true',
+                        dest='all', 
+                        help='Capture all the packets that you can.')
     parser.add_argument('-q', 
                         '--quiet', 
                         action='store_true',
@@ -98,4 +108,6 @@ def get_handshake_args():
         options.channel = [each for each in options.channel.split(',')]
     else:
         options.channel = []
+    if options.all and options.eapol:
+        parser.error("[+] Please select either to capture all the packets or just EAPOL not both")
     return options
