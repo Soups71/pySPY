@@ -33,4 +33,5 @@ def get_hostnames(packet):
 
 # Function to send dataframe back to the main program
 def getDF():
-    return networks
+    sorted_network = networks.sort_values("dBm_Signal", ascending=False)
+    return sorted_network

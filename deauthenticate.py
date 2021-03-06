@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 # Imports for libraries
-from socket import timeout
+# from socket import timeout
 from pyspy.attacks import deauth
 from pyspy.callbacks import get_hostnames, getDF
 from pyspy.config import interface, get_deauth_args, get_interfaces, banner
@@ -63,28 +63,29 @@ def deauthenticate(arguments):
     # Check if a destination mac was provided
     # If it was only deauth that device
     # Else disconnect all the things
-    if arguments.destination_mac:
+    if arguments.destination_mac == None:
         if arguments.forever:
             print_update(f"[+] Sending Packets Forever!!! Screw the WIFI connectivity to: {networks.loc[arguments.bssid, 'SSID']}!!!")
             deauth(my_interface.name, 
                     arguments.bssid, 
-                    arguments.destination_mac, 
+                    
                     forever=True)
         else:
             print_update(f"[+] Sending 2000 Packets!!! Screw the WIFI connectivity to: {networks.loc[arguments.bssid, 'SSID']}!!!")
             deauth(my_interface.name, 
-                    arguments.bssid, 
-                    arguments.destination_mac)
+                    arguments.bssid)
     else:
         if arguments.forever:
             print_update(f"[+] Sending Packets Forever!!! Screw the WIFI connectivity to all the things!!!")
             deauth(my_interface.name, 
-                    arguments.bssid, 
+                    arguments.bssid,
+                    arguments.destination_mac,  
                     forever=True)
         else:
             print_update(f"[+] Sending 2000 Packets!!! Screw the WIFI connectivity to all the things!!!")
-            deauth(my_interface.name, 
-                    arguments.bssid)
+            deauth(my_interface.name,  
+                    arguments.bssid,
+                    arguments.destination_mac)
 
 
 # Start of the program

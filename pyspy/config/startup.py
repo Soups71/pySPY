@@ -70,11 +70,11 @@ def get_deauth_args():
                     dest='channel', 
                     help="Specific channels you'd like to scan. Format: -c 1")
 
-    parser.set_defaults(deauth = False, quiet = False)
+    parser.set_defaults(quiet = False)
     options = parser.parse_args()
         # Check if target was provided
-    if options.deauth and not options.bssid:
-        parser.error("[-] Please specify an BSSID mac for deauth attack, use --help for more info.")
+    if options.bssid == None:
+        parser.error("[-] Please specify an BSSID of the AP for deauth attack, use --help for more info.")
 
     return options
 
