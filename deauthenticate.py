@@ -94,5 +94,8 @@ if __name__ == '__main__':
     if not cli_arguments.quiet:
         banner()
         print_good("[+] Begining deauthentication initialization sequence")
-    deauthenticate(cli_arguments)
+    if os.geteuid() == 0:
+        deauthenticate(cli_arguments)
+    else:
+        print_warning("[+] This program must be ran as root!!!")
         

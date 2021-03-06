@@ -12,7 +12,6 @@ import os
 # Global variable to be used by all functions
 keep_going = True
 
-
 # Function that updates screen with new APs
 def print_all():
     global keep_going
@@ -87,4 +86,7 @@ if __name__ == "__main__":
     cli_arguments = get_AP_scanner_args()
     if  not cli_arguments.quiet:
         banner()
-    apSPY(cli_arguments)
+    if os.geteuid() == 0:
+        apSPY(cli_arguments)
+    else:
+        print_warning("[+] This program must be ran as root!!!")
