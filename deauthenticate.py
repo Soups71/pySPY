@@ -24,8 +24,7 @@ def deauthenticate(arguments):
             print_warning("[+] Error: No external WiFi card present.")
             print_warning("[+] If you don't have a built in wifi card then please specify the specific wifi card")
             return -1
-
-
+            
     print_update(f"[+] The interface used for deauthentication is: {my_interface.name}")
     
     # Put the interface into monitor mode
