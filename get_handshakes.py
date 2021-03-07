@@ -20,7 +20,9 @@ def handshake(arguments):
         
     # Get every wifi interface other than the built in wifi card
     wireless_interfaces = get_interfaces()[1:]
-
+    if wireless_interfaces == []:
+        print_warning("[+] Could not find any wireless cards")
+        return -1
     # Create an interface object for each interface card
     for each in wireless_interfaces:
         interfaces.append(interface(each))

@@ -1,4 +1,3 @@
-import psutil
 from termcolor import cprint
 
 # Fancy print
@@ -18,12 +17,3 @@ def print_update(output, newline=True):
     else:
         cprint(output, 'yellow', end='')
 
-# Gets interfaces connected to the computer
-def get_interfaces():
-    addresses = psutil.net_if_addrs()
-    wireless_interfaces = []
-    # Looks for every wireless interface
-    for intface, addr_list in addresses.items():
-        if  intface[:2] == "wl":
-            wireless_interfaces.append(intface)
-    return wireless_interfaces

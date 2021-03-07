@@ -25,7 +25,8 @@ def valid_interface(prospective_interface):
     return(prospective_interface in possible_interfaces)
 
 def valid_channel(prospective_channel):
-    if prospective_channel == None:
+    print(prospective_channel)
+    if prospective_channel == [] :
         return True
     return bool(re.match("^[0-9]*$", prospective_channel))
 
@@ -146,6 +147,4 @@ def get_handshake_args():
         parser.error("[+] Please select either to capture all the packets or just EAPOL not both")
     if not valid_channel(options.channel):
         parser.error("[-] Please enter a valid channel")
-    if not valid_interface(options.interface):
-        parser.error("[-] The interface you entered was not found to be connected to the system. Please reconnect it or use a different interface")
     return options
