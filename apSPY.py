@@ -80,7 +80,8 @@ def apSPY(arguments):
         printer.join()
     user_input.join()
     channel_changer.join()
-
+    if arguments.write != None:
+        save_results(arguments.write)
 
 if __name__ == "__main__":
     cli_arguments = get_AP_scanner_args()

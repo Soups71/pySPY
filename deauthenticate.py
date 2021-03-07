@@ -7,7 +7,6 @@ from pyspy.callbacks import get_hostnames, getDF
 from pyspy.config import interface, get_deauth_args, get_interfaces, banner
 from pyspy.config import print_warning, print_update, print_good
 from scapy import *
-from time import sleep
 from scapy.all import *
 
 
@@ -24,7 +23,7 @@ def deauthenticate(arguments):
             print_warning("[+] Error: No external WiFi card present.")
             print_warning("[+] If you don't have a built in wifi card then please specify the specific wifi card")
             return -1
-            
+
     print_update(f"[+] The interface used for deauthentication is: {my_interface.name}")
     
     # Put the interface into monitor mode

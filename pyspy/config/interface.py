@@ -3,7 +3,6 @@ from time import sleep
 from datetime import datetime
 from scapy import *
 from scapy.all import *
-from termcolor import cprint
 
 # Class for wifi card
 class interface:
