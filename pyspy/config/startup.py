@@ -1,5 +1,18 @@
 import argparse
 from termcolor import cprint
+from pyspy.config import get_interfaces
+import re
+
+def valid_filename(prospective_filename):
+    return bool(re.match("^[A-Za-z0-9_]*$", prospective_filename))
+
+def valid_interface(prospective_interface):
+    possible_interfaces = get_interfaces()
+    return(prospective_interface in possible_interfaces)
+
+def valid_channel(prospective_channel):
+    return bool(re.match("^[0-9]*$", prospective_channel))
+
 
 # Banner Art
 def banner():
@@ -33,10 +46,12 @@ def get_AP_scanner_args():
                         dest='write', 
                         help='Saves AP data to file')
     
-
     parser.set_defaults(quiet = False, write = False, capture_all=False)
     options = parser.parse_args()
-        # Check if target was provided
+    if not valid_filename(options.write):
+        parser.error("[-] Filenames may only include letters, numbers, and/or underscores")
+    if not valid_interface(options.interface):
+        parser.error("[-] The interface you entered was not found to be connected to the system. Please reconnect it or use a different interface")
     return options
 
 
@@ -75,7 +90,10 @@ def get_deauth_args():
         # Check if target was provided
     if options.bssid == None:
         parser.error("[-] Please specify an BSSID of the AP for deauth attack, use --help for more info.")
-
+    if not valid_channel(options.channel):
+        parser.error("[-] Please enter a valid channel")
+    if not valid_interface(options.interface):
+        parser.error("[-] The interface you entered was not found to be connected to the system. Please reconnect it or use a different interface")
     return options
 
 
@@ -110,4 +128,8 @@ def get_handshake_args():
         options.channel = []
     if options.all and options.eapol:
         parser.error("[+] Please select either to capture all the packets or just EAPOL not both")
+    if not valid_channel(options.channel):
+        parser.error("[-] Please enter a valid channel")
+    if not valid_interface(options.interface):
+        parser.error("[-] The interface you entered was not found to be connected to the system. Please reconnect it or use a different interface")
     return options

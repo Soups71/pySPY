@@ -22,6 +22,7 @@ def print_update(output, newline=True):
 def get_interfaces():
     addresses = psutil.net_if_addrs()
     wireless_interfaces = []
+    # Looks for every wireless interface
     for intface, addr_list in addresses.items():
         if  intface[:2] == "wl":
             wireless_interfaces.append(intface)
