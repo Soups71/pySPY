@@ -1,16 +1,32 @@
 import argparse
 from termcolor import cprint
-from pyspy.config import get_interfaces
 import re
+import psutil
+
+# Gets interfaces connected to the computer
+def get_interfaces():
+    addresses = psutil.net_if_addrs()
+    wireless_interfaces = []
+    # Looks for every wireless interface
+    for intface, addr_list in addresses.items():
+        if  intface[:2] == "wl":
+            wireless_interfaces.append(intface)
+    return wireless_interfaces
 
 def valid_filename(prospective_filename):
+    if prospective_filename == None:
+        return True
     return bool(re.match("^[A-Za-z0-9_]*$", prospective_filename))
 
 def valid_interface(prospective_interface):
+    if(prospective_interface == None):
+        return True
     possible_interfaces = get_interfaces()
     return(prospective_interface in possible_interfaces)
 
 def valid_channel(prospective_channel):
+    if prospective_channel == None:
+        return True
     return bool(re.match("^[0-9]*$", prospective_channel))
 
 
@@ -46,11 +62,11 @@ def get_AP_scanner_args():
                         dest='write', 
                         help='Saves AP data to file')
     
-    parser.set_defaults(quiet = False, write = False, capture_all=False)
+    parser.set_defaults(quiet = False, capture_all=False)
     options = parser.parse_args()
-    if options.write !=  None and not valid_filename(options.write):
+    if not valid_filename(options.write):
         parser.error("[-] Filenames may only include letters, numbers, and/or underscores")
-    if options.interface !=  None and not valid_interface(options.interface):
+    if not valid_interface(options.interface):
         parser.error("[-] The interface you entered was not found to be connected to the system. Please reconnect it or use a different interface")
     return options
 
@@ -90,9 +106,9 @@ def get_deauth_args():
         # Check if target was provided
     if options.bssid == None:
         parser.error("[-] Please specify an BSSID of the AP for deauth attack, use --help for more info.")
-    if options.channel !=  None and not valid_channel(options.channel):
+    if not valid_channel(options.channel):
         parser.error("[-] Please enter a valid channel")
-    if options.interface !=  None and not valid_interface(options.interface):
+    if not valid_interface(options.interface):
         parser.error("[-] The interface you entered was not found to be connected to the system. Please reconnect it or use a different interface")
     return options
 
@@ -128,8 +144,8 @@ def get_handshake_args():
         options.channel = []
     if options.all and options.eapol:
         parser.error("[+] Please select either to capture all the packets or just EAPOL not both")
-    if options.channel !=  None and not valid_channel(options.channel):
+    if not valid_channel(options.channel):
         parser.error("[-] Please enter a valid channel")
-    if options.interface !=  None and not valid_interface(options.interface):
+    if not valid_interface(options.interface):
         parser.error("[-] The interface you entered was not found to be connected to the system. Please reconnect it or use a different interface")
     return options

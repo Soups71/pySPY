@@ -40,7 +40,11 @@ def apSPY(arguments):
     if arguments.interface != None:
         interface_name = arguments.interface
     else:
-        interface_name = get_interfaces()[1]
+        try:
+            interface_name = get_interfaces()[1]
+        except:
+            print_warning("[+] Could not find wifi card other than main card. If this is a mistake please enter the card name manually.")
+            return -1
 
     current_interface = interface(interface_name)
     if not arguments.quiet:
