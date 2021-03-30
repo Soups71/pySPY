@@ -1,3 +1,5 @@
 scapy
 argparse
 termcolor
+psutil
+pandas
