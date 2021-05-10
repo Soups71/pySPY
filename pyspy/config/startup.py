@@ -2,6 +2,7 @@ import argparse
 from termcolor import cprint
 import re
 import psutil
+import json
 
 # Gets interfaces connected to the computer
 def get_interfaces():
@@ -148,3 +149,22 @@ def get_handshake_args():
     if not valid_channel(options.channel):
         parser.error("[-] Please enter a valid channel")
     return options
+
+
+    def get_channels():
+        with open("config.json", 'r') as config_reader:
+            channels = json.loads(config_reader.read())
+        return [*channels["5Ghz_channels"], *channels["2_4Ghz_channels"]]
+
+
+    def get_2ghz_channels():
+        with open("config.json", 'r') as config_reader:
+            channels = json.loads(config_reader.read())
+        return channels["2_4Ghz_channels"]
+
+
+    def get_5ghz_channels():
+        with open("config.json", 'r') as config_reader:
+            channels = json.loads(config_reader.read())
+        return channels["5Ghz_channels"]
+    
