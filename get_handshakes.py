@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # Imports
-from pyspy.config import interface, get_interfaces, get_handshake_args, banner
+from pyspy.config import interface, get_interfaces, get_handshake_args, banner, get_2ghz_channels, get_5ghz_channels, get_channels
 from pyspy.config import print_warning, print_update, print_good
 from scapy import *
 from scapy.all import *
@@ -8,8 +8,18 @@ from threading import Thread
 
 
 def handshake(arguments):
+    important_channels = []
     # Most common wifi channels
-    important_channels = [1, 6, 11, 12, 13]
+    if arguments.frequency == 2:
+        important_channels = get_2ghz_channels()
+    elif arguments.frequency == 5:
+        important_channels = get_5ghz_channels()
+    else:
+        important_channels = get_channels()
+
+    # Update important channels if other channels were passed
+    if(len(arguments.channel)>=1):
+        important_channels = arguments.channel
 
     # List to hold the interface objects
     interfaces = []
@@ -44,7 +54,7 @@ def handshake(arguments):
     for each in interfaces:
         each.set_pcap()
 
-    # Multi threading tyhe capture process for each antenna
+    # Multi threading the capture process for each antenna
     processes = []
     current_process = 0
     for each in interfaces:

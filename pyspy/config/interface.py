@@ -28,6 +28,19 @@ class interface:
 
     # Sets the file name for the packet capture
     def set_pcap(self):
+        try:
+            # Gets current working directory
+            path = os.getcwd()
+            #Adds log path to log directory
+            logging_path = os.path.join(path, "pcaps")
+            # CHecks if the path exists; if not it makes it
+            if(not os.path.isdir(logging_path)):
+                os.mkdir(logging_path)
+            # If error occurrs then we print to the console because its a bad thing
+            # if this can't happen
+        except OSError:
+            print (f"Creation of the directory {path} failed")
+            return -1
         filename = "pcaps/"+datetime.now().strftime("%d_%m_%Y_%H_%M_%S_Channel_") + str(self.channel)+".pcap"
         self.file = PcapWriter(filename, append=True, sync=True)
 

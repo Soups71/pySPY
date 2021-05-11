@@ -143,6 +143,10 @@ def get_handshake_args():
                         action='store_true',
                         dest='all', 
                         help='Capture all the packets that you can.')
+    parser.add_argument('-freq',
+                        '--frequency',
+                        dest='frequency', 
+                        help='Specify frequency to run attack: 2 for 2.4 ghz or 5 for 5 ghz')
     parser.add_argument('-q', 
                         '--quiet', 
                         action='store_true',
@@ -157,8 +161,9 @@ def get_handshake_args():
         options.channel = []
     if options.all and options.eapol:
         parser.error("[+] Please select either to capture all the packets or just EAPOL not both")
-    if not valid_channel(options.channel):
-        parser.error("[-] Please enter a valid channel")
+    for each_channel in options.channel:
+        if not valid_channel(each_channel):
+            parser.error("[-] Please enter a valid channel")
     return options
 
 
