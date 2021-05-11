@@ -9,10 +9,12 @@ class interface:
     # Initiate the object
     def __init__(self, name):
         self.name = name
-        self.channel = 1
+        self.channel_index = 0
+        self.channels = []
         self.kill = False
         self.file = ""
         self.packet_count = 0
+        self.channel = 0
 
     # Sets the interface into monitor mode
     def set_monitor_mode(self):
@@ -50,14 +52,26 @@ class interface:
         while not self.kill:
             sniff(iface=self.name, prn=self.save_packet_handler, count=200)
 
+    # Set channel range
+    def set_channel_range(self, range):
+        self.channels = range
+
     # Used to change the channel
     def change_channel(self, ch):
             self.channel = ch
             os.system(f"sudo iwconfig {self.name} channel {self.channel}")
     
     # Used to update the channel
-    def increment_channel(self):
+    def increment_channel_auto(self):
         while not self.kill:
-            self.channel = self.channel%14+1
-            os.system(f"sudo iwconfig {self.name} channel {self.channel}")
+            self.change_channel(self.channels[self.channel_index])
+            self.channel_index += 1
+            if self.channel_index >= len(self.channels):
+                self.channel_index = 0
             sleep(.2)
+    # Used to update the channel
+    def increment_channel_manually(self):
+        self.change_channel(self.channels[self.channel_index])
+        self.channel_index += 1
+        if self.channel_index >= len(self.channels):
+            self.channel_index = 0
