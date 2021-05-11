@@ -4,6 +4,8 @@ import re
 import psutil
 import json
 
+config_file = "pyspy/config/config.json"
+
 # Gets interfaces connected to the computer
 def get_interfaces():
     addresses = psutil.net_if_addrs()
@@ -29,7 +31,10 @@ def valid_channel(prospective_channel):
     print(prospective_channel)
     if prospective_channel == [] :
         return True
-    return bool(re.match("^[0-9]*$", prospective_channel))
+    try:
+        return bool(re.match("^[0-9]*$", prospective_channel))
+    except:
+        return False
 
 
 # Banner Art
@@ -53,6 +58,10 @@ def get_AP_scanner_args():
                         '--interface',
                         dest='interface', 
                         help='Specify interface to run attack')
+    parser.add_argument('-freq',
+                        '--frequency',
+                        dest='frequency', 
+                        help='Specify frequency to run attack: 2 for 2.4 ghz or 5 for 5 ghz')
                         
     parser.add_argument('-q', 
                     '--quiet', 
@@ -87,7 +96,11 @@ def get_deauth_args():
     parser.add_argument('-dm', 
                         '--dest_mac', 
                         dest='destination_mac', 
-                        help='Destination MAC address. Needed for Deauth attack')
+                        help='Destination MAC address. Needed to deauth specific device')
+    parser.add_argument('-freq',
+                        '--frequency',
+                        dest='frequency', 
+                        help='Specify frequency to run attack: 2 for 2.4 ghz or 5 for 5 ghz')
     parser.add_argument('-f', 
                         '--forever', 
                         action='store_true',
@@ -108,8 +121,6 @@ def get_deauth_args():
         # Check if target was provided
     if options.bssid == None:
         parser.error("[-] Please specify an BSSID of the AP for deauth attack, use --help for more info.")
-    if not valid_channel(options.channel):
-        parser.error("[-] Please enter a valid channel")
     if not valid_interface(options.interface):
         parser.error("[-] The interface you entered was not found to be connected to the system. Please reconnect it or use a different interface")
     return options
@@ -121,7 +132,7 @@ def get_handshake_args():
     parser.add_argument('-c',
                         '--channel',
                         dest='channel', 
-                        help="Specific channels you'd like to scan. Format: -c 1,2,3,4")
+                        help="Specific channels you'd like to scan. 2.4 or 5 GHz Format: -c 1,2,3,4")
     parser.add_argument('-e', 
                         '--eapol', 
                         action='store_true',
@@ -151,20 +162,20 @@ def get_handshake_args():
     return options
 
 
-    def get_channels():
-        with open("config.json", 'r') as config_reader:
-            channels = json.loads(config_reader.read())
-        return [*channels["5Ghz_channels"], *channels["2_4Ghz_channels"]]
+def get_channels():
+    with open(config_file, 'r') as config_reader:
+        channels = json.loads(config_reader.read())
+    return [*channels["2_4Ghz_channels"], *channels["5Ghz_channels"]]
 
 
-    def get_2ghz_channels():
-        with open("config.json", 'r') as config_reader:
-            channels = json.loads(config_reader.read())
-        return channels["2_4Ghz_channels"]
+def get_2ghz_channels():
+    with open(config_file, 'r') as config_reader:
+        channels = json.loads(config_reader.read())
+    return channels["2_4Ghz_channels"]
 
 
-    def get_5ghz_channels():
-        with open("config.json", 'r') as config_reader:
-            channels = json.loads(config_reader.read())
-        return channels["5Ghz_channels"]
-    
+def get_5ghz_channels():
+    with open(config_file, 'r') as config_reader:
+        channels = json.loads(config_reader.read())
+    return channels["5Ghz_channels"]
+
