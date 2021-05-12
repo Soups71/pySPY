@@ -23,7 +23,7 @@ def deauthenticate(arguments):
             print_warning("[+] Error: No external WiFi card present.")
             print_warning("[+] If you don't have a built in wifi card then please specify the specific wifi card")
             return -1
-            
+    # Selects wifi channels
     if arguments.frequency == "2":
         current_interface.set_channel_range(get_2ghz_channels())
     elif arguments.frequency == "5":
@@ -97,7 +97,7 @@ def deauthenticate(arguments):
 
 
 # Start of the program
-if __name__ == '__main__':
+if __name__ == '__main__':good
     # Gets arguments from the cli
     cli_arguments = get_deauth_args()
     if not cli_arguments.quiet:

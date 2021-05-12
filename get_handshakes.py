@@ -69,7 +69,9 @@ def handshake(arguments):
         user_input = input()
         if user_input.lower() == 'y' or user_input.lower() == '':
             for each in interfaces:
-                print_good(f"[+] {each.packet_count}  packets captured on channel {each.channel}")
+                print_good(f"[+] Interface: {each.name}")
+                print_good(f"\t[+] {each.packet_count} packets captured on channel {each.channel}")
+                print_good(f"\t[+] {each.eapol_packet_count} EAPOL packets captured on channel {each.channel}")
         elif(user_input.lower() == 'exit'):
             print_update("[+] Starting exit protocol. Just sit back and relax.")
             for each in interfaces:
