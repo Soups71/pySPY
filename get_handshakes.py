@@ -1,4 +1,10 @@
 #!/usr/bin/python3
+
+"""
+Created By: Soups
+Purpose: Collect wifi packets
+"""
+
 # Imports
 from pyspy.config import interface, get_interfaces, get_handshake_args, banner, get_2ghz_channels, get_5ghz_channels, get_channels
 from pyspy.config import print_warning, print_update, print_good

@@ -50,7 +50,7 @@ class interface:
         if(p.haslayer(EAPOL)):
             self.file.write(p)
             self.eapol_packet_count +=1
-            self.packet_count += 0
+            self.packet_count += 1
     
     # Used to save all the packets
     def save_packet_handler(self, p):
@@ -71,6 +71,7 @@ class interface:
 
     # Set channel range
     def set_channel_range(self, range):
+        # Range is an array of integer values
         self.channels = range
 
     # Used to change the channel

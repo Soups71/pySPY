@@ -1,5 +1,11 @@
 #!/usr/bin/python3
 
+"""
+Created by: Soups
+Purpose: This script acts as replacement for airodump-ng. 
+         It does not save any packets to a file.
+"""
+
 # Imports
 from pyspy.config.config import print_good
 from scapy.all import *

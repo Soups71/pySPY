@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 
+"""
+Created By: Soups
+Purpose: This script replaces airoplay-ng.
+"""
+
 # Imports for libraries
-# from socket import timeout
 from pyspy.attacks import deauth
 from pyspy.callbacks import get_hostnames, getDF
 from pyspy.config import interface, get_deauth_args, get_interfaces, banner, get_2ghz_channels, get_5ghz_channels, get_channels
