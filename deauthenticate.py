@@ -97,7 +97,7 @@ def deauthenticate(arguments):
 
 
 # Start of the program
-if __name__ == '__main__':good
+if __name__ == '__main__':
     # Gets arguments from the cli
     cli_arguments = get_deauth_args()
     if not cli_arguments.quiet:
@@ -107,4 +107,3 @@ if __name__ == '__main__':good
         deauthenticate(cli_arguments)
     else:
         print_warning("[+] This program must be ran as root!!!")
-        
