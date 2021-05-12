@@ -10,9 +10,9 @@ from threading import Thread
 def handshake(arguments):
     important_channels = []
     # Most common wifi channels
-    if arguments.frequency == 2:
+    if int(arguments.frequency) == 2:
         important_channels = get_2ghz_channels()
-    elif arguments.frequency == 5:
+    elif int(arguments.frequency) == 5:
         important_channels = get_5ghz_channels()
     else:
         important_channels = get_channels()
@@ -20,13 +20,8 @@ def handshake(arguments):
     # Update important channels if other channels were passed
     if(len(arguments.channel)>=1):
         important_channels = arguments.channel
-
     # List to hold the interface objects
     interfaces = []
-
-    # Update important channels if other channels were passed
-    if(len(arguments.channel)>=1):
-        important_channels = arguments.channel
         
     # Get every wifi interface other than the built in wifi card
     wireless_interfaces = get_interfaces()[1:]

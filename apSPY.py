@@ -47,9 +47,9 @@ def apSPY(arguments):
             return -1
 
     current_interface = interface(interface_name)
-    if arguments.frequency == 2:
+    if int(arguments.frequency) == 2:
         current_interface.set_channel_range(get_2ghz_channels())
-    elif arguments.frequency == 5:
+    elif int(arguments.frequency) == 5:
         current_interface.set_channel_range(get_5ghz_channels())
     else:
         current_interface.set_channel_range(get_channels())
