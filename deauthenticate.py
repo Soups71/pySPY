@@ -24,9 +24,9 @@ def deauthenticate(arguments):
             print_warning("[+] If you don't have a built in wifi card then please specify the specific wifi card")
             return -1
             
-    if int(arguments.frequency) == 2:
+    if arguments.frequency == "2":
         current_interface.set_channel_range(get_2ghz_channels())
-    elif int(arguments.frequency) == 5:
+    elif arguments.frequency == "5":
         current_interface.set_channel_range(get_5ghz_channels())
     else:
         current_interface.set_channel_range(get_channels())
