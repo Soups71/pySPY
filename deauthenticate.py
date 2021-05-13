@@ -44,7 +44,7 @@ def deauthenticate(arguments):
     
     # Gets the empty dataframe from the callback
     networks = getDF()
-    
+    arguments.bssid = arguments.bssid.lower()
     if arguments.channel == None:
         # While the AP mac address isn't present keep searching
         print_update(f"[+] Beginning search for {arguments.bssid}")
