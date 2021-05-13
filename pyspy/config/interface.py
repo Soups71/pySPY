@@ -42,7 +42,7 @@ class interface:
         except OSError:
             print (f"Creation of the directory {path} failed")
             return -1
-        filename = "pcaps/"+datetime.now().strftime("%d_%m_%Y_%H_%M_%S_Channel_") + str(self.channel)+".pcap"
+        filename = "pcaps/"+datetime.now().strftime("%Y_%m_%d_%H_%M_%S_Channel_") + str(self.channel)+".pcap"
         self.file = PcapWriter(filename, append=True, sync=True)
 
     # Used to save only the wifi handshakes
