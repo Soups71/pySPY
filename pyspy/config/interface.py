@@ -16,6 +16,7 @@ class interface:
         self.packet_count = 0
         self.eapol_packet_count = 0
         self.channel = 0
+        self.packet_buf = []
 
     # Sets the interface into monitor mode
     def set_monitor_mode(self):
@@ -48,16 +49,24 @@ class interface:
     # Used to save only the wifi handshakes
     def eapol_handler(self, p):
         if(p.haslayer(EAPOL)):
-            self.file.write(p)
+            self.packet_buf.append(p)
             self.eapol_packet_count +=1
             self.packet_count += 1
+            if len(self.packet_buf) == 1000:
+                self.save_to_file()
     
     # Used to save all the packets
     def save_packet_handler(self, p):
-        self.file.write(p)
+        self.packet_buf.append(p)
         if(p.haslayer(EAPOL)):
             self.eapol_packet_count +=1
         self.packet_count +=1
+        if len(self.packet_buf) == 1000:
+            self.save_to_file()
+
+    def save_to_file(self):
+        for each in self.packet_buf:
+            self.file.write(each)
 
     # Used to sniff all the wifi handshakes
     def sniff_EAPOL_packets(self):
