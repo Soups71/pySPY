@@ -67,6 +67,7 @@ class interface:
     def save_to_file(self):
         for each in self.packet_buf:
             self.file.write(each)
+        self.packet_buf = []
 
     # Used to sniff all the wifi handshakes
     def sniff_EAPOL_packets(self):
