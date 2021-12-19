@@ -3,6 +3,7 @@ from time import sleep
 from datetime import datetime
 from scapy import *
 from scapy.all import *
+from pylibpcap.base import Sniff
 
 # Class for wifi card
 class interface:
@@ -13,6 +14,7 @@ class interface:
         self.channels = []
         self.kill = False
         self.file = ""
+        self.file_name = ""
         self.packet_count = 0
         self.eapol_packet_count = 0
         self.channel = 0
@@ -43,8 +45,8 @@ class interface:
         except OSError:
             print (f"Creation of the directory {path} failed")
             return -1
-        filename = "pcaps/"+datetime.now().strftime("%Y_%m_%d_%H_%M_%S_Channel_") + str(self.channel)+".pcap"
-        self.file = PcapWriter(filename, append=True, sync=True)
+        self.file_name = "pcaps/"+datetime.now().strftime("%Y_%m_%d_%H_%M_%S_Channel_") + str(self.channel)+".pcap"
+        self.file = PcapWriter(self.file_name, append=True, sync=True)
 
     # Used to save only the wifi handshakes
     def eapol_handler(self, p):
@@ -71,13 +73,34 @@ class interface:
 
     # Used to sniff all the wifi handshakes
     def sniff_EAPOL_packets(self):
+        check = 0
+        sniffobj = Sniff(self.name, count=100, promisc=1, out_file=self.file_name)
         while not self.kill:
-            sniff(iface=self.name, prn=self.eapol_handler, count=200)
+            for plen, t, buf in sniffobj.capture():
+                self.packet_count+=1
+                if check == 100:
+                    check = 0
+                    break
+                else:
+                    check+=1
+            # sniff(iface=self.name, prn=self.eapol_handler, count=200)
+        sniffobj.close()
+            
 
     # Used to sniff all the packets
     def sniff_all_packets(self):
+        check = 0
+        sniffobj = Sniff(self.name, count=-1, promisc=1, out_file=self.file_name)
         while not self.kill:
-            sniff(iface=self.name, prn=self.save_packet_handler, count=200)
+            for plen, t, buf in sniffobj.capture():
+                self.packet_count+=1
+                if check == 100:
+                    check = 0
+                    break
+                else:
+                    check+=1
+            # sniff(iface=self.name, prn=self.save_packet_handler, count=200)
+        sniffobj.close()
 
     # Set channel range
     def set_channel_range(self, range):
