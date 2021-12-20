@@ -4,7 +4,7 @@ from datetime import datetime
 from scapy import *
 from scapy.all import *
 from pylibpcap.base import Sniff
-
+from pylibpcap.parse import to_hex_string
 # Class for wifi card
 class interface:
     # Initiate the object
@@ -13,7 +13,7 @@ class interface:
         self.channel_index = 0
         self.channels = []
         self.kill = False
-        self.file = ""
+        # self.file = ""
         self.file_name = ""
         self.packet_count = 0
         self.eapol_packet_count = 0
@@ -37,7 +37,7 @@ class interface:
             path = os.getcwd()
             #Adds log path to log directory
             logging_path = os.path.join(path, "pcaps")
-            # CHecks if the path exists; if not it makes it
+            # Checks if the path exists; if not it makes it
             if(not os.path.isdir(logging_path)):
                 os.mkdir(logging_path)
             # If error occurrs then we print to the console because its a bad thing
@@ -46,30 +46,6 @@ class interface:
             print (f"Creation of the directory {path} failed")
             return -1
         self.file_name = "pcaps/"+datetime.now().strftime("%Y_%m_%d_%H_%M_%S_Channel_") + str(self.channel)+".pcap"
-        self.file = PcapWriter(self.file_name, append=True, sync=True)
-
-    # Used to save only the wifi handshakes
-    def eapol_handler(self, p):
-        if(p.haslayer(EAPOL)):
-            self.packet_buf.append(p)
-            self.eapol_packet_count +=1
-            self.packet_count += 1
-            if len(self.packet_buf) == 1000:
-                self.save_to_file()
-    
-    # Used to save all the packets
-    def save_packet_handler(self, p):
-        self.packet_buf.append(p)
-        if(p.haslayer(EAPOL)):
-            self.eapol_packet_count +=1
-        self.packet_count +=1
-        if len(self.packet_buf) == 1000:
-            self.save_to_file()
-
-    def save_to_file(self):
-        for each in self.packet_buf:
-            self.file.write(each)
-        self.packet_buf = []
 
     # Used to sniff all the wifi handshakes
     def sniff_EAPOL_packets(self):
@@ -78,12 +54,13 @@ class interface:
         while not self.kill:
             for plen, t, buf in sniffobj.capture():
                 self.packet_count+=1
+                if "88 8e" in to_hex_string(buf):
+                    self.eapol_packet_count += 1
                 if check == 100:
                     check = 0
                     break
                 else:
                     check+=1
-            # sniff(iface=self.name, prn=self.eapol_handler, count=200)
         sniffobj.close()
             
 
@@ -99,7 +76,6 @@ class interface:
                     break
                 else:
                     check+=1
-            # sniff(iface=self.name, prn=self.save_packet_handler, count=200)
         sniffobj.close()
 
     # Set channel range
@@ -120,6 +96,7 @@ class interface:
             if self.channel_index >= len(self.channels):
                 self.channel_index = 0
             sleep(.2)
+    
     # Used to update the channel
     def increment_channel_manually(self):
         self.change_channel(self.channels[self.channel_index])

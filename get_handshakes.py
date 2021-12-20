@@ -69,7 +69,6 @@ def handshake(arguments):
             print_update(f"[+] Capturing Packets with {each.name} on channel {each.channel}")
         current_process +=1
 
-    # This doesn't work to stop it but it trys it's best
     while(True):
         print_good("[+] Get update? (Y/n/exit): ", False)
         user_input = input()
@@ -77,7 +76,8 @@ def handshake(arguments):
             for each in interfaces:
                 print_good(f"[+] Interface: {each.name}")
                 print_good(f"\t[+] {each.packet_count} packets captured on channel {each.channel}")
-                print_good(f"\t[+] {each.eapol_packet_count} EAPOL packets captured on channel {each.channel}")
+                if(arguments.eapol):
+                    print_good(f"\t[+] {each.eapol_packet_count} EAPOL packets captured on channel {each.channel}")
         elif(user_input.lower() == 'exit'):
             print_update("[+] Starting exit protocol. Just sit back and relax.")
             for each in interfaces:

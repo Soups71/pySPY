@@ -137,12 +137,12 @@ def get_handshake_args():
                         '--eapol', 
                         action='store_true',
                         dest='eapol', 
-                        help='Used to only capture eapol packets')
+                        help='Used to display number of all captured packets. This is slower than the -a option!!! ')
     parser.add_argument('-a', 
                         '--all', 
                         action='store_true',
                         dest='all', 
-                        help='Capture all the packets that you can.')
+                        help='Capture all the packets that you can as fast as you can.')
     parser.add_argument('-freq',
                         '--frequency',
                         dest='frequency', 
