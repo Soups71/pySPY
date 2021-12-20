@@ -1,3 +1,7 @@
 scapy
 argparse
 termcolor
+psutil
+pandas
+Cython
+python-libpcap

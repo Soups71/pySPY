@@ -1,10 +1,16 @@
 #!/usr/bin/python3
 
+"""
+Created by: Soups
+Purpose: This script acts as replacement for airodump-ng. 
+         It does not save any packets to a file.
+"""
+
 # Imports
 from pyspy.config.config import print_good
 from scapy.all import *
 from threading import Thread
-from pyspy.config import interface, get_interfaces, banner, print_update, print_warning, get_AP_scanner_args
+from pyspy.config import interface, get_interfaces, banner, print_update, print_warning, get_AP_scanner_args, get_2ghz_channels, get_5ghz_channels, get_channels
 from pyspy.callbacks import get_hostnames, getDF, save_results
 import os
 
@@ -37,7 +43,7 @@ def get_input():
 def apSPY(arguments):
     global keep_going
     # Get's interface name
-    if arguments.interface != None:
+    if arguments.interface is not None:
         interface_name = arguments.interface
     else:
         try:
@@ -47,6 +53,13 @@ def apSPY(arguments):
             return -1
 
     current_interface = interface(interface_name)
+    if arguments.frequency == "2":
+        current_interface.set_channel_range(get_2ghz_channels())
+    elif arguments.frequency == "5":
+        current_interface.set_channel_range(get_5ghz_channels())
+    else:
+        current_interface.set_channel_range(get_channels())
+
     if not arguments.quiet:
         print_update("[+] Putting the interface into monitor mode")
     
@@ -67,10 +80,10 @@ def apSPY(arguments):
     user_input.start()
 
     # start the channel changer
-    channel_changer = Thread(target=current_interface.increment_channel)
+    channel_changer = Thread(target=current_interface.increment_channel_auto)
     channel_changer.daemon = True
     channel_changer.start()
-
+    print(current_interface.name)
     # Start sniffing
     while keep_going:
         sniff(prn=get_hostnames, iface=current_interface.name, count = 100)
